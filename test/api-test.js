@@ -93,11 +93,6 @@ describe('IP library for node.js', function() {
       assert.equal(ip.mask('192.168.1.134', '255.255.255.0'), '192.168.1.0');
       assert.equal(ip.mask('192.168.1.134', '::ffff:ff00'), '::ffff:c0a8:100');
     });
-
-    it('should not leak data', function() {
-      for (var i = 0; i < 10; i++)
-        assert.equal(ip.mask('::1', '0.0.0.0'), '::');
-    });
   });
 
   describe('subnet() method', function() {
@@ -244,6 +239,7 @@ describe('IP library for node.js', function() {
 
   describe('isPrivate() method', function() {
     it('should check if an address is localhost', function() {
+      assert.equal(ip.isPrivate('0.0.0.0'), true);
       assert.equal(ip.isPrivate('127.0.0.1'), true);
     });
 
@@ -347,6 +343,12 @@ describe('IP library for node.js', function() {
     describe('::', function() {
       it('should respond with true', function() {
         assert.ok(ip.isLoopback('::'))
+      });
+    });
+
+    describe('0.0.0.0', function() {
+      it('should respond with true', function() {
+        assert.ok(ip.isLoopback('0.0.0.0'))
       });
     });
   });
